@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class ProductResponseDTO {
-    
-    private String message;
-    private String error;
+
+  private String message;
+  private String error;
 }
