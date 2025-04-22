@@ -45,8 +45,14 @@ public class ProductController {
     return productService.getAllProducts();
   }
 
-  @GetMapping("/{email}")
+  @GetMapping("/api/{email}")
   public List<Product> getAllProductsByEmail(@PathVariable String email) {
     return productService.getAllProductsByEmail(email);
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<Product> getProductById(@PathVariable String id) {
+    Product product = productService.getProductById(id);
+    return ResponseEntity.ok(product);
   }
 }

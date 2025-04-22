@@ -104,4 +104,27 @@ public class ProductService {
     URL url = blob.signUrl(1, TimeUnit.HOURS);
     return url.toString();
   }
+
+  public Product getProductById(String id) {
+    Product product = productRepository
+      .findById(id)
+      .orElseThrow(() -> new RuntimeException("Product not found for id: " + id)
+      );
+
+    try {
+      String objectName = product.getImage();
+      if (objectName != null && !objectName.isEmpty()) {
+        String signedUrl = generateSignedUrl(objectName);
+        product.setSignedUrl(signedUrl);
+      }
+    } catch (Exception e) {
+      log.error(
+        "Error generating signed URL for image: {}",
+        product.getImage(),
+        e
+      );
+    }
+
+    return product;
+  }
 }
