@@ -55,4 +55,40 @@ public class ProductController {
     Product product = productService.getProductById(id);
     return ResponseEntity.ok(product);
   }
+
+  //filtered Categories API
+  @GetMapping("/Burgers")
+  public List<Product> getProductByBurgers() {
+    String category = "Burgers";
+
+    return productService.getProductByCategory(category);
+  }
+
+  @GetMapping("/Pizza")
+  public List<Product> getProductByPizza() {
+    String category = "Pizza";
+
+    return productService.getProductByCategory(category);
+  }
+
+  @GetMapping("/Beverages")
+  public List<Product> getProductByBeverages() {
+    String category = "Beverages";
+
+    return productService.getProductByCategory(category);
+  }
+
+  @GetMapping("/Vegetarian")
+  public List<Product> getProductByVegetarian() {
+    String category = "Vegetarian";
+
+    return productService.getProductByCategory(category);
+  }
+
+  @GetMapping("/Others")
+  public List<Product> getProductByOthers() {
+    String category = "Others";
+
+    return productService.getProductByCategory(category);
+  }
 }

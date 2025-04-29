@@ -18,5 +18,6 @@ public class ProductRequestDTO {
   private String description;
   private BigDecimal price;
   private String restaurantEmail;
+  private String category;
   private String image;
 }
