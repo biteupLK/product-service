@@ -6,4 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ProductRepository extends MongoRepository<Product, String> {
   List<Product> findByRestaurantEmail(String email);
+  List<Product> findByCategory(String category);
 }
