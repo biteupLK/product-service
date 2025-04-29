@@ -52,6 +52,7 @@ public class ProductService {
       product.setDescription(req.getDescription());
       product.setPrice(req.getPrice());
       product.setRestaurantEmail(req.getRestaurantEmail());
+      product.setCategory(req.getCategory());
       product.setImage(imageUrl);
 
       Product saved = productRepository.save(product);
