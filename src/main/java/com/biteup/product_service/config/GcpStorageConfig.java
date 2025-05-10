@@ -11,6 +11,7 @@ import org.springframework.core.io.ClassPathResource;
 @Configuration
 public class GcpStorageConfig {
 
+  //here call for storage via bitbucket connection done by created key-json file
   @Bean
   public Storage storage() throws IOException {
     GoogleCredentials credentials = GoogleCredentials.fromStream(

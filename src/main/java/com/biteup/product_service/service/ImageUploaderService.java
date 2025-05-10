@@ -17,6 +17,8 @@ public class ImageUploaderService {
 
   private final Storage storage;
 
+  //product images uploads into google cloud console bitbucket created folder /uploads
+  
   public String uploadToGcs(String bucketName, MultipartFile file)
     throws IOException {
     String fileName =
