@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   mongodb:
     image: mongo:7.0.5
@@ -10,6 +12,18 @@ services:
       MONGO_INITDB_DATABASE: biteup
     volumes:
       - mongodb_data:/data/db
+
+  product-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: product-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://admin:admin@mongodb:27017/biteup?authSource=admin
 
 volumes:
   mongodb_data:
