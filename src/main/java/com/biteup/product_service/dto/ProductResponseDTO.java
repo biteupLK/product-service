@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class ProductResponseDTO {
 
+  //response dto 
   private String message;
   private String error;
 }

@@ -40,6 +40,7 @@ public class ProductService {
     this.bucketName = bucketName;
   }
 
+  // create products
   public ProductResponseDTO createProducts(
     ProductRequestDTO req,
     MultipartFile imageFile
@@ -64,6 +65,7 @@ public class ProductService {
     }
   }
 
+  // get all product
   public List<Product> getAllProducts() {
     List<Product> products = productRepository.findAll();
     for (Product product : products) {
@@ -82,6 +84,7 @@ public class ProductService {
     return products;
   }
 
+  // get product by email
   public List<Product> getAllProductsByEmail(String email) {
     List<Product> products = productRepository.findByRestaurantEmail(email);
     for (Product product : products) {
@@ -100,6 +103,7 @@ public class ProductService {
     return products;
   }
 
+  //shorten url for upload gitbucket
   public String generateShortenedSignedUrl(String objectName) throws Exception {
     Blob blob = storage.get(bucketName, objectName);
     if (blob == null) {
@@ -121,6 +125,7 @@ public class ProductService {
     }
   }
 
+  //get product by id
   public Product getProductById(String id) {
     Product product = productRepository
       .findById(id)
@@ -144,6 +149,7 @@ public class ProductService {
     return product;
   }
 
+  // get product by category
   public List<Product> getProductByCategory(String category) {
     List<Product> products = productRepository.findByCategory(category);
     for (Product product : products) {
@@ -161,4 +167,69 @@ public class ProductService {
     }
     return products;
   }
+
+  //update a product
+  public ProductResponseDTO updateProduct(
+        String id,
+        ProductRequestDTO req,
+        MultipartFile imageFile
+    ) {
+        try {
+            Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found for id: " + id));
+
+            // Update fields if they are provided in the request
+            if (req != null) {
+                if (req.getName() != null) {
+                    existingProduct.setName(req.getName());
+                }
+                if (req.getDescription() != null) {
+                    existingProduct.setDescription(req.getDescription());
+                }
+                if (req.getPrice() != null) {
+                    existingProduct.setPrice(req.getPrice());
+                }
+                if (req.getRestaurantEmail() != null) {
+                    existingProduct.setRestaurantEmail(req.getRestaurantEmail());
+                }
+            }
+
+            // Update image if provided
+            if (imageFile != null && !imageFile.isEmpty()) {
+                String newImageUrl = imageUploaderService.uploadToGcs(bucketName, imageFile);
+                existingProduct.setImage(newImageUrl);
+            }
+
+            productRepository.save(existingProduct);
+            log.info("Product updated successfully: {}", existingProduct);
+
+            return new ProductResponseDTO("Product Updated Successfully", null);
+        } catch (IOException e) {
+            log.error("Image upload failed during update", e);
+            return new ProductResponseDTO(null, "Image upload failed during update");
+        } catch (Exception e) {
+            log.error("Error updating product", e);
+            return new ProductResponseDTO(null, "Error updating product: " + e.getMessage());
+        }
+    }
+
+    //delete a product
+    public ProductResponseDTO deleteProduct(String id) {
+        try {
+            Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found for id: " + id));
+
+            // Optional: Delete the image from GCS if you want to clean up
+            // imageUploaderService.deleteFromGcs(bucketName, product.getImage());
+
+            productRepository.delete(product);
+            log.info("Product deleted successfully with id: {}", id);
+
+            return new ProductResponseDTO("Product Deleted Successfully", null);
+        } catch (Exception e) {
+            log.error("Error deleting product", e);
+            return new ProductResponseDTO(null, "Error deleting product: " + e.getMessage());
+        }
+    }
+
 }

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class ProductRequestDTO {
 
+  //reqesting data transfer object
   private String id;
 
   private String name;
